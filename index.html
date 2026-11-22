@@ -31,6 +31,7 @@ footer{margin-top:25px;font-size:.9rem;opacity:.8}
 .panel p{font-size:1.15rem;line-height:1.5}
 .close{border:0;background:var(--lav);color:#5e4384;border-radius:50%;width:38px;height:38px;font-size:1.3rem;position:absolute;right:14px;top:14px;cursor:pointer}
 .done{border:0;border-radius:24px;background:#7655a6;color:white;padding:12px 20px;font-size:1rem;font-weight:700;cursor:pointer}
+@media(max-width:560px){main{padding:20px 12px 35px}.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.door{min-height:95px;border-radius:14px}.door .num{font-size:1.6rem}}
 
 .gate{position:fixed;inset:0;z-index:20;background:linear-gradient(145deg,#f4edff,#e8f7f0 55%,#fff0f5);display:flex;align-items:center;justify-content:center;padding:20px}
 .gate-card{width:min(100%,420px);background:#fff;border-radius:26px;padding:30px 24px;box-shadow:0 18px 60px #59417a22;text-align:center}
@@ -38,12 +39,26 @@ footer{margin-top:25px;font-size:.9rem;opacity:.8}
 .gate-card p{line-height:1.5}
 .gate-card input{width:100%;padding:14px 16px;border:2px solid #d9c8f1;border-radius:14px;font-size:1rem;margin:10px 0;outline:none}
 .gate-card button{border:0;border-radius:24px;background:#7655a6;color:white;padding:13px 22px;font-size:1rem;font-weight:700;cursor:pointer;width:100%}
-.gate-error{color:#b42355;min-height:1.4em;font-size:.92rem}
+.gate-error{color:#b42355;min-height:1.4em;font-size:.92em}
 body.locked main,body.locked .modal{visibility:hidden}
-\n@media(max-width:560px){main{padding:20px 12px 35px}.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.door{min-height:95px;border-radius:14px}.door .num{font-size:1.6rem}}
+
 </style>
 </head>
-<body>
+<body class="locked">
+
+<div class="gate" id="passwordGate">
+  <div class="gate-card">
+    <div style="font-size:2.5rem">🎄 ✨</div>
+    <h1>24 дива до Різдва</h1>
+    <p>Введи пароль, щоб відкрити адвент-календар 💜</p>
+    <form id="passwordForm">
+      <input id="passwordInput" type="password" placeholder="Введи пароль" autocomplete="off" required>
+      <button type="submit">Відкрити календар</button>
+    </form>
+    <div class="gate-error" id="passwordError" aria-live="polite"></div>
+  </div>
+</div>
+
 <main>
   <div style="font-size:2rem" aria-hidden="true">❄️ 🎄 ✨</div>
   <h1>24 дива до Різдва</h1>
@@ -62,6 +77,21 @@ body.locked main,body.locked .modal{visibility:hidden}
   </div>
 </div>
 <script>
+
+const ACCESS_PASSWORD = "Dyvo24";
+const gate = document.getElementById("passwordGate");
+document.getElementById("passwordForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+  const entered = document.getElementById("passwordInput").value;
+  if (entered === ACCESS_PASSWORD) {
+    gate.style.display = "none";
+    document.body.classList.remove("locked");
+  } else {
+    document.getElementById("passwordError").textContent = "Пароль неправильний. Спробуй ще раз 💜";
+    document.getElementById("passwordInput").select();
+  }
+});
+
 const tasks = [
 ["🤗","П’ять обіймів","Подаруй п’ять обіймів тим, хто цього хоче. Не забудь запитати дозволу!"],
 ["🍬","Солодкий сюрприз","Пригости когось цукеркою або поділися маленьким смаколиком, якщо це всім можна."],
