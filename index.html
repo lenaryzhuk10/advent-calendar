@@ -1,102 +1,108 @@
-❄️ 🎄 ✨
-24 дива до Різдва
-Щодня відкривай нове віконечко, виконуй завдання та наближайся до найчарівнішого свята!
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>24 дива до Різдва — інтерактивний адвент-календар</title>
+<style>
+:root{--purple:#7655a6;--lav:#eee5fa;--mint:#dff4e9;--pink:#fbe4ee;--ink:#433653}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);
+background:radial-gradient(circle at 15% 10%,#fff 0 2px,transparent 3px),linear-gradient(145deg,#f4edff,#e8f7f0 55%,#fff0f5);background-size:38px 38px,auto}
+main{max-width:1000px;margin:auto;padding:28px 18px 50px;text-align:center}
+h1{font-size:clamp(2rem,6vw,3.5rem);margin:8px 0;color:#65448f}
+.subtitle{font-size:1.1rem;margin:0 auto 22px;max-width:650px}
+.hint{display:inline-block;background:#fff9;padding:10px 16px;border-radius:30px;margin-bottom:22px;font-size:.95rem}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.door{border:2px solid #fff;background:linear-gradient(145deg,#d9c8f1,#bda6df);color:#fff;border-radius:18px;min-height:112px;box-shadow:0 5px 0 #9c83c4,0 8px 18px #59417a22;cursor:pointer;transition:transform .15s,filter .15s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-weight:800}
+.door:nth-child(3n){background:linear-gradient(145deg,#c6ead8,#8ec9ae);box-shadow:0 5px 0 #75ae91,0 8px 18px #365f4a22}
+.door:nth-child(3n+2){background:linear-gradient(145deg,#f7d8e6,#e9aeca);box-shadow:0 5px 0 #cf91ad,0 8px 18px #75455a22}
+.door:hover{transform:translateY(-3px);filter:brightness(1.04)}
+.door .num{font-size:1.9rem;line-height:1}
+.door .emoji{font-size:1.35rem}
+.door.opened{background:linear-gradient(145deg,#fff,#f5efff);color:#795ca1;border:2px dashed #b69bd7;box-shadow:inset 0 0 0 2px #fff}
+.door.opened:nth-child(3n){color:#397b5b;background:linear-gradient(145deg,#fff,#eaf8f0)}
+footer{margin-top:25px;font-size:.9rem;opacity:.8}
+.modal{display:none;position:fixed;inset:0;background:#24173599;padding:18px;align-items:center;justify-content:center;z-index:5}
+.modal.show{display:flex}
+.panel{background:#fff;border-radius:24px;padding:28px 24px;max-width:480px;width:100%;box-shadow:0 18px 60px #24173555;position:relative}
+.panel .big{font-size:3rem}
+.panel h2{color:#684993;margin:8px 0}
+.panel p{font-size:1.15rem;line-height:1.5}
+.close{border:0;background:var(--lav);color:#5e4384;border-radius:50%;width:38px;height:38px;font-size:1.3rem;position:absolute;right:14px;top:14px;cursor:pointer}
+.done{border:0;border-radius:24px;background:#7655a6;color:white;padding:12px 20px;font-size:1rem;font-weight:700;cursor:pointer}
 
-🎁 Натисни на будь-яке віконечко, щоб відкрити сюрприз
-
-🎄
-1
-грудня
-
-❄️
-2
-грудня
-
-💜
-3
-грудня
-
-🎁
-4
-грудня
-
-⭐
-5
-грудня
-
-🧤
-6
-грудня
-
-🦌
-7
-грудня
-
-🍊
-8
-грудня
-
-🔔
-9
-грудня
-
-☃️
-10
-грудня
-
-✨
-11
-грудня
-
-🕯️
-12
-грудня
-
-🎄
-13
-грудня
-
-❄️
-14
-грудня
-
-💜
-15
-грудня
-
-🎁
-16
-грудня
-
-⭐
-17
-грудня
-
-🧤
-18
-грудня
-
-🦌
-19
-грудня
-
-🍊
-20
-грудня
-
-🔔
-21
-грудня
-
-☃️
-22
-грудня
-
-✨
-23
-грудня
-
-🕯️
-24
-грудня
-💜 Твій час для маленьких див, добрих справ і веселих відкриттів!
+.gate{position:fixed;inset:0;z-index:20;background:linear-gradient(145deg,#f4edff,#e8f7f0 55%,#fff0f5);display:flex;align-items:center;justify-content:center;padding:20px}
+.gate-card{width:min(100%,420px);background:#fff;border-radius:26px;padding:30px 24px;box-shadow:0 18px 60px #59417a22;text-align:center}
+.gate-card h1{font-size:2rem;margin:8px 0 12px}
+.gate-card p{line-height:1.5}
+.gate-card input{width:100%;padding:14px 16px;border:2px solid #d9c8f1;border-radius:14px;font-size:1rem;margin:10px 0;outline:none}
+.gate-card button{border:0;border-radius:24px;background:#7655a6;color:white;padding:13px 22px;font-size:1rem;font-weight:700;cursor:pointer;width:100%}
+.gate-error{color:#b42355;min-height:1.4em;font-size:.92rem}
+body.locked main,body.locked .modal{visibility:hidden}
+\n@media(max-width:560px){main{padding:20px 12px 35px}.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.door{min-height:95px;border-radius:14px}.door .num{font-size:1.6rem}}
+</style>
+</head>
+<body>
+<main>
+  <div style="font-size:2rem" aria-hidden="true">❄️ 🎄 ✨</div>
+  <h1>24 дива до Різдва</h1>
+  <p class="subtitle">Щодня відкривай нове віконечко, виконуй завдання та наближайся до найчарівнішого свята!</p>
+  <div class="hint">🎁 Натисни на будь-яке віконечко, щоб відкрити сюрприз</div>
+  <section class="grid" id="calendar" aria-label="Адвент-календар"></section>
+  <footer>💜 Твій час для маленьких див, добрих справ і веселих відкриттів!</footer>
+</main>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="taskTitle">
+  <div class="panel">
+    <button class="close" id="close" aria-label="Закрити">×</button>
+    <div class="big" id="taskEmoji">🎄</div>
+    <h2 id="taskTitle">День 1</h2>
+    <p id="taskText"></p>
+    <button class="done" id="done">Виконано! ⭐</button>
+  </div>
+</div>
+<script>
+const tasks = [
+["🤗","П’ять обіймів","Подаруй п’ять обіймів тим, хто цього хоче. Не забудь запитати дозволу!"],
+["🍬","Солодкий сюрприз","Пригости когось цукеркою або поділися маленьким смаколиком, якщо це всім можна."],
+["💬","Сміливі слова","Скажи комусь те добре й важливе, що давно хотів сказати."],
+["😊","Комплімент дня","Зроби щирий комплімент трьом людям. Подивись, як засяють їхні усмішки!"],
+["💌","Таємна подяка","Подякуй людині, яка сьогодні тобі допомогла."],
+["🎶","Заспівай!","Заспівай уривок улюбленої пісні. Можна разом із друзями!"],
+["😂","Усмішка без причини","Спробуй розсмішити когось доброю жартівливою історією."],
+["🤝","Допомога поруч","Запропонуй комусь допомогу, навіть якщо тебе про неї не просили."],
+["🌟","Ти — молодець!","Похвали себе за щось, що сьогодні вдалося."],
+["🕺","Танцювальна хвилинка","Увімкни уявну музику й потанцюй 30 секунд так, ніби ніхто не бачить!"],
+["💛","Добре слово","Скажи комусь: «Я радий/рада, що ти є!»"],
+["📸","Зимова поза","Зроби кумедну зимову позу. Запропонуй друзям повторити!"],
+["🎁","Подарунок без коробки","Подаруй комусь малюнок, записку або просто свою увагу."],
+["🙌","П’ять «дай п’ять!»","Привітайся долоньками з п’ятьма охочими друзями."],
+["🧡","Секрет доброти","Зроби одну добру справу так, щоб ніхто не здогадався, хто її зробив."],
+["🗣️","Скажи вголос","Поділися з кимось своєю маленькою мрією або бажанням."],
+["👏","Оплески для друга","Подякуй оплесками комусь із класу за його старання чи талант."],
+["🌈","Три радості","Назви три речі, які сьогодні зробили тебе щасливим/щасливою."],
+["🧤","Помічник дня","Допоможи прибрати, подати речі або навести лад навколо себе."],
+["💫","Нове знайомство","Поговори сьогодні з кимось, із ким рідко спілкуєшся."],
+["❤️","Обійми себе","Обійми себе й скажи: «Я важливий/важлива. У мене все вийде!»"],
+["🎤","Хвилина слави","Розкажи про свій талант або покажи те, що вмієш."],
+["✨","Побажання навколо","Побажай трьом людям щось приємне на сьогодні."],
+["🎄","Різдвяне диво","Скажи кожному поруч щось добре. Створи навколо себе атмосферу свята!"]
+];
+const emojis=["🎄","❄️","💜","🎁","⭐","🧤","🦌","🍊","🔔","☃️","✨","🕯️"];
+const grid=document.getElementById("calendar"), modal=document.getElementById("modal");
+let current=0;
+tasks.forEach((task,i)=>{
+ const b=document.createElement("button"); b.className="door"; b.type="button";
+ b.innerHTML=`<span class="emoji">${emojis[i%emojis.length]}</span><span class="num">${i+1}</span><span>грудня</span>`;
+ b.setAttribute("aria-label",`Відкрити віконечко ${i+1}`);
+ b.addEventListener("click",()=>openTask(i,b)); grid.appendChild(b);
+});
+function openTask(i,b){current=i;document.getElementById("taskEmoji").textContent=tasks[i][0];document.getElementById("taskTitle").textContent=`${i+1} грудня — ${tasks[i][1]}`;document.getElementById("taskText").textContent=tasks[i][2];modal.classList.add("show");}
+function closeModal(){modal.classList.remove("show")}
+document.getElementById("close").addEventListener("click",closeModal);
+document.getElementById("done").addEventListener("click",()=>{const b=grid.children[current];b.classList.add("opened");b.innerHTML=`<span class="emoji">⭐</span><span class="num">${current+1}</span><span>Виконано!</span>`;closeModal();});
+modal.addEventListener("click",e=>{if(e.target===modal)closeModal()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+</script>
+</body>
+</html>
